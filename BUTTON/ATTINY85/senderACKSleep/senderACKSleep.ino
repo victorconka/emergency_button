@@ -54,7 +54,7 @@ void nrfOFF(){
 /**
  * send message until ack is received.
  */
-void writeMSG(){ 
+void writeMSG(){
     nrfON(); //turn nrf on to send the message
     
     byte gotByte;  
@@ -79,7 +79,7 @@ void writeMSG(){
             if(counter > 200){
               //byte max value is 255, to avoid overflow or malfunctionning, reset counter.
               counter = 1;
-            }else
+            }else{
               //increase counter.
               counter++;
           }
@@ -87,7 +87,7 @@ void writeMSG(){
       }
     }
 
-    nrfOFF();//message recieved, turn nrf off
+    nrfOFF(); //message recieved, turn nrf off
 }
 
 /**
