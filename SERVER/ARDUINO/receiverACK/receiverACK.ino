@@ -1,15 +1,22 @@
-#define CE_PIN 7
-#define CSN_PIN 8
-
+#define CE_PIN D2
+#define CSN_PIN D8
+#define led D1 
+#define button A0
 
 #include <SPI.h>
 #include "RF24.h"
 
 RF24 radio(CE_PIN, CSN_PIN);
 boolean ledState = false;
-int led = 5;
-const byte address[][6] = {"server","button"};
+
+const byte address[][7] = {"server" , "button"};
 unsigned long payload = 0;
+int btn = 0; //analog button value
+//nrf variables
+byte pipeNo;
+byte gotByte; 
+byte gotBytePrev = 0;
+
 
 void setup() {
   Serial.begin(115200);
@@ -24,6 +31,9 @@ void setup() {
   radio.startListening();
 }
 
+/**
+ *  Toggle led from low to high and viceversa 
+ */
 void toggle(){
   
   if(ledState){
@@ -36,17 +46,49 @@ void toggle(){
   
 }
 
-void loop(void){
-  byte pipeNo;
-  byte gotByte;
-  
-  while( radio.available(&pipeNo)){
+/**
+ * Make sure led toggles only once because the button
+ * sends message until ack is received, so such message
+ * is sent and received by the server more than once
+ */
+void toggleOnce(){
+  if(gotBytePrev != gotByte){
+    toggle();
+    gotBytePrev = gotByte;
+  }
+}
+
+/**
+ * Read analog button value and decide what button was pressed.
+ * Buttons are connected to different resistor values, therefore
+ * each button gives a different value when read.
+ */
+void readButtons(){
+  btn = analogRead(button)/100;
+  if(btn!=0){
+    Serial.println(btn);
+    for(int i = 0;i < btn; i++){
       toggle();
+      delay(300);
+      toggle();
+      delay(300);
+    }
+  }
+}
+
+
+void loop(void){
+
+  readButtons();
+  while( radio.available(&pipeNo)){
+      //toggle();
+      toggleOnce();
       radio.read( &gotByte, 1 );
       gotByte++;
       radio.writeAckPayload(pipeNo,&gotByte, 1 );
       Serial.print("Got Payload ");
       Serial.println(gotByte);
   }
+  delay(250);
 }
 
