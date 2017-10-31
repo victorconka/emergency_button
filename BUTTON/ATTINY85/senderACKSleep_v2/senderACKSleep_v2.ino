@@ -18,7 +18,10 @@
 RF24 radio(CE_PIN, CSN_PIN);  //NRF24 object
 const byte rxAddr[][7] = {"server","button"}; //device roles
 byte counter = 1; //value that will be sent to the other device
+byte resetCounter = 0; // counter to detect nrf malfunctions
 boolean bReleased = HIGH; //variable used to avoid click release being activated. in other words, when button is pressed, the action is  performed once.
+boolean messageDelivered = true;  //flag to know wheather the message was delivered
+byte gotByte = 0; //ACK message value
 
 void setup() {
   pinMode(BTN_PIN, INPUT);
@@ -32,14 +35,18 @@ void nrfON(){
 //---------------------NRF-CONFIGURATION------------------------------------------------ 
   digitalWrite(NRF_VCC_PIN,HIGH); // turn nrf_vcc ON
   delay(50);
-  radio.powerUp();  
 //--------------------------------------------------------------------------------------
   radio.begin(); // Start up the radio
+  radio.setChannel(126);
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setDataRate(RF24_250KBPS);
   radio.setAutoAck(1); // Ensure autoACK is enabled
-  radio.setRetries(0,15); // Max delay between retries & number of retries
+  radio.setRetries(15,15); // Max delay between retries & number of retries
+  radio.setCRCLength(RF24_CRC_8);          // Use 8-bit CRC for performance
   radio.enableAckPayload();               // Allow optional ack payloads
   radio.openWritingPipe(rxAddr[0]); // Write to device address 'server'
   radio.openReadingPipe(1,rxAddr[1]); // Read on pipe 1 for device address 'button'
+  radio.powerUp();  
 //--------------------------------------------------------------------------------------  
 }
 
@@ -52,42 +59,48 @@ void nrfOFF(){
 }
 
 /**
+ * manages resetCounter boolean value
+ * to make sure problem is not nrf module
+ * and it's the out of reach situation.
+ */
+void manageCounter(){
+  resetCounter++;
+  if(resetCounter == 50){
+    nrfOFF();
+    delay(250);
+    nrfON();
+    resetCounter=0;
+  }
+  delay(100);
+}
+
+/**
  * send message until ack is received.
  */
 void writeMSG(){
-    nrfON(); //turn nrf on to send the message
-    
-    byte gotByte;  
-    
-    while(!radio.write( &counter, 1 )){
-        delay(250);
-    }
-    
-    if(!radio.available()){
-        //after the message was sent, if no ack recieved or the ack message is wrong, keep sending message.
-        writeMSG(); 
-    }else{
-        while(radio.available() ){
-        //after the message was sent, if radio available, read check the ack message
-          radio.read( &gotByte, 1 );
-        //verify ack message
-          if(counter+1 != gotByte){
-            //ack message is incorrect, send message.
-            writeMSG();
-          }else{
-            //ack was correct, increase counter.
-            if(counter > 200){
-              //byte max value is 255, to avoid overflow or malfunctionning, reset counter.
-              counter = 1;
-            }else{
-              //increase counter.
-              counter++;
-          }
-        }
+  //WRITE MESSAGE
+  while(!radio.writeFast( &counter, 1 )){
+    //NRF MODULE HAS ISSUES OR SERVER IS OUT OF REACH
+    manageCounter();
+  }
+  //READ ACK
+  if(radio.available() ){
+    //listeing to incomming ack
+    gotByte = 0; //value that will never be received
+    radio.read( &gotByte, 1 ); //read message
+    resetCounter = 0; //radio working fine - wrong answer, reset counter to 0
+    if((counter+1) == gotByte){
+      messageDelivered = true;//notify loop that message was delivered    
+      if(counter > 200){
+        counter = 1;
+      }else{
+        counter++;
       }
     }
-
-    nrfOFF(); //message recieved, turn nrf off
+  }
+  if(!messageDelivered){
+    writeMSG();
+  }
 }
 
 /**
@@ -124,13 +137,13 @@ void loop(void){
   //button press means 2 actions (press and unpress).
   //in order to send the message once, we have to use variable
   //to control such a situation.
-  
   if (bReleased) { // is button in released state (open)
     bReleased = LOW; // button is now in pressed state (closed)
+    messageDelivered = false; //start up with message not delivered
+    nrfON();
     writeMSG(); //send the message
-  }
-    else { // button was in presse state so has been released
+    nrfOFF();
+  }else { // button was in presse state so has been released
     bReleased = HIGH; // so set flag and go take a nap
   }
-  
 }

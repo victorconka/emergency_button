@@ -80,8 +80,8 @@ void readButtons(){
 void loop(void){
 
   readButtons();
+  
   while( radio.available(&pipeNo)){
-      //toggle();
       toggleOnce();
       radio.read( &gotByte, 1 );
       gotByte++;

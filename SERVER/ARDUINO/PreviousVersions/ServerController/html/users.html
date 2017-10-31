@@ -1,0 +1,53 @@
+<html>
+<head>
+<style>
+input,h2,h3,h4{text-align:center;}
+div{width:550px;}
+label{float:left;}
+li{margin-bottom:5px;}
+.i_t{width:400px;float:right;}
+</style>
+</head>
+<body>
+<div>
+<form action="/users" method="POST">
+<h2>SETTINGS</h2>
+<label>DEBUG MODE:</label>
+<input class="i_t" type="checkbox" name="DEBUG" value="DEBUG" r_m_debug DEBUG_state><br><br>
+<label>Ping IP:</label>
+<input class="i_t" type="text" name="computer_ip" value="computer_ip_value" r_m><br>    
+<label>MAC:</label>
+<input class="i_t" type="text" name="wol_mac" value="wol_mac_value" r_m><br>
+<h3>WIFI Access Point</h3>
+<label>ApName:</label>
+<input class="i_t" type="text" name="wifiApName" value="wifiApName_value" r_m><br>
+<label>ApPassword:</label>
+<input class="i_t" type="text" name="wifiApPassword" value="wifiApPassword_value" r_m><br>
+<h3>IFTTT</h3>
+<label>Key:</label>
+<input class="i_t" type="text" name="ifttt_key" value="ifttt_key_value" r_m><br>
+<label>Event Name:</label>
+<input class="i_t" type="text" name="ifttt_event_name" value="ifttt_event_name_value" r_m><br>
+<h3>Telegram</h3>
+<label>Bot Token:</label>
+<input class="i_t" type="text" name="telegram_bot_token" value="telegram_bot_token_value" r_m></br>
+<label>Telegram Group:</label>
+<input class="i_t" type="text" name="telegram_group" value="telegram_group_value" r_m><br>
+<br>
+<label>Telegram Contacts:</label>
+<br>
+<ol>
+<li><input class="i_t" type="text" name="contact1" value="value_contact_1" r_m></li>
+<li><input class="i_t" type="text" name="contact2" value="value_contact_2" r_m></li>
+<li><input class="i_t" type="text" name="contact3" value="value_contact_3" r_m></li>
+<li><input class="i_t" type="text" name="contact4" value="value_contact_4" r_m></li>
+<li><input class="i_t" type="text" name="contact5" value="value_contact_5" r_m></li>
+</ol>
+button_place
+<br>
+</form>
+You can access this page until you
+<a href="/?DISCONNECT=YES">disconnect</a>
+</div>
+</body>
+</html>
