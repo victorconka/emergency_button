@@ -223,6 +223,7 @@ if (DEBUG){
   Serial.println(F("setupTelegram()"));
 }
   bot.reset(new UniversalTelegramBot(telegram_bot_token, client));
+  
   String message = "Online with IP: ";
   message += WiFi.localIP().toString();
   sendMsg(telegram_group, message);
