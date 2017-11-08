@@ -1,0 +1,19 @@
+set_contact1 - set telegram contact 1.
+set_contact2 - set telegram contact 2.
+set_contact3 - set telegram contact 3.
+set_contact4 - set telegram contact 4.
+set_contact5 - set telegram contact 5.
+set_telegram_group - set telegram group id.
+set_ifttt_key - set ifttt key.
+set_ifttt_event_name - set ifttt event name.
+set_wifi_ap_name - wifi name in AP MODE.
+set_wifi_ap_password - wifi password in AP MODE.
+set_debug0 - turn debug off.
+set_debug1 - turn debug on.
+set_settings_mode0 - turn SETTINGS_MODE OFF.
+set_settings_mode1 - turn SETTINGS_MODE ON.
+show_settings - show configuration.
+set_mac - set MAC addres of device to Wake On Lan.
+set_ip - set IP addres of device to Wake On Lan.
+wol - send WOL packet.
+ping - send ping packets.

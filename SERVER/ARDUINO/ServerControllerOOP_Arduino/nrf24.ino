@@ -1,3 +1,15 @@
+class nrf24{
+/**
+ * NRF24 variables
+ */
+#define CE_PIN D2             // NRF CE PIN
+#define CSN_PIN D8            // NRF CSN PIN
+RF24 radio(CE_PIN, CSN_PIN);  // NRF object 
+const byte address[][7] = {"server" , "button"};    // NRF communication roles
+byte pipeNo;                  // pipe Number the message was received from
+byte gotByte;                 // value recieved
+byte gotBytePrev = 0;         // previous value received. needed to keep track of repeated messages
+  
 /**
  * NRF24
  * initialize nrf module
@@ -17,9 +29,7 @@ if (DEBUG){
   radio.openWritingPipe(address[1]);       // write to button
   radio.openReadingPipe(1,address[0]);     // receive data as server
   radio.startListening();                  // Start listening
-if (DEBUG){
-  radio.printDetails();                  // Dump the configuration of the rf unit for debugging
-}
+  //radio.printDetails();                  // Dump the configuration of the rf unit for debugging
   radio.powerUp();                         //Power up the radio
 }
 
@@ -42,4 +52,4 @@ void listenNRF(){
       radio.writeAckPayload(pipeNo,&gotByte, 1 );
   }
 }
-
+};

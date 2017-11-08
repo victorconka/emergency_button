@@ -1,3 +1,12 @@
+	/**
+	* Este archivo contiene los metodos y procedimientos necesarios para la 
+	* escritura y lectura de la memoria interna de la placa de desarrollo WeMos D1 mini 
+	* al igual que los metodos necesarios para establecer las variables imprescendibles 
+	* verificando en la medida de lo posible si estas son crrectas.
+	*/
+
+class fileSystem{
+	public:
 /**
  * Initialize spiffs file system and load
  * stored data.
@@ -107,7 +116,7 @@ if (DEBUG){
 Serial.println(F("Failed to parse config file"));
 }
     return false;
-  }else{
+  }else{  
     //RECOVER VALUES FROM MEMORY
 if (DEBUG){
 Serial.println(F("Success parse config file. recovering values."));
@@ -496,4 +505,5 @@ Serial.println(F("settingsToString()"));
   settings += F("\nComputer IP: ");
   settings += computer_ip;
 
+}
 }

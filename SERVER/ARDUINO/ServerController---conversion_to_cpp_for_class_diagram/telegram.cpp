@@ -1,11 +1,19 @@
 /**
+ * Este archivo contiene los metodos y procedimientos necesarios para el uso de 
+ * la API Telegram: Envio, recepci?n y tratamiento de los mensajes.
+ */
+
+
+class telegram{
+	public:
+/**
  * TCP CLEANUP
  * cleans tcp connection heap memory so that esp module
  * doesn't reboot when out of memory.
  * thankx to @psy0rz for this marvelous piece of code
  * https://github.com/esp8266/Arduino/issues/1923
  */
-void tcpCleanup()
+ void tcpCleanup()
 {
   while(tcp_tw_pcbs!=NULL)
   {
@@ -85,11 +93,11 @@ if (DEBUG){
   Serial.print(F("chat_id: "));
   Serial.println(chat_id);
 }
-bool saveConfiguration = false;
+bool result = false;
 bool previosSettingsMode = SETTINGS_MODE;
     if( text.indexOf(F("/set_telegram_group")) == 0 ){
         text = clearString(F("/set_telegram_group"), text);
-        saveConfiguration = setTelegramGroup(text);
+        result = setTelegramGroup(text);
     }
     else if( text.indexOf(F("/set_contact")) == 0 ){
         text = clearString(F("/set_contact"), text);
@@ -99,47 +107,47 @@ bool previosSettingsMode = SETTINGS_MODE;
             Serial.println(contactN);
           }
         text.remove(0,1);
-        saveConfiguration = setTelegramContact(contactN,text);
+        result = setTelegramContact(contactN,text);
     }
     else if( text.indexOf(F("/set_ifttt_key")) == 0 ){
         text = clearString(F("/set_ifttt_key"), text);
-        saveConfiguration = setIftttKey(text);
+        result = setIftttKey(text);
     }
     else if( text.indexOf(F("/set_ifttt_event_name")) == 0 ){
         text = clearString(F("/set_ifttt_event_name"), text);
-        saveConfiguration = setIftttEventName(text);
+        result = setIftttEventName(text);
     }
     else if( text.indexOf(F("/set_wifi_ap_name")) == 0 ){
         text = clearString(F("/set_wifi_ap_name"), text);
-        saveConfiguration = setWifiApName(text);
+        result = setWifiApName(text);
     }
     else if( text.indexOf(F("/set_wifi_ap_password")) == 0 ){
         text = clearString(F("/set_wifi_ap_password"), text);
-        saveConfiguration = setWifiApPassword(text);
+        result = setWifiApPassword(text);
     }
     else if( text.indexOf(F("/set_debug")) == 0 ){
         text = clearString(F("/set_debug"), text);
         char debug = text.charAt(0);
-        saveConfiguration = setDebug(debug);
+        result = setDebug(debug);
     }
    else if( text.indexOf(F("/set_settings_mode")) == 0 ){
         text = clearString(F("/set_settings_mode"), text);
         char settings_mode = text.charAt(0);
-        saveConfiguration = setSettingsMode(settings_mode);
+        result = setSettingsMode(settings_mode);
     }
     else if( text.indexOf(F("/set_mac")) == 0 ){
         text = clearString(F("/set_mac"), text);
-        saveConfiguration = setWolMac(text);
-        if(!saveConfiguration){
-          sendMsg(chat_id, F("Problem with provided MAC ADDRESS, maybe incorrect format"));
+        result = setWolMac(text);
+        if(!result){
+          sendMsg(chat_id, F("Problem with provided mac, maybe incorrect format"));
         }
     }
     else if( text.indexOf(F("/set_ip")) == 0 ){
         text = clearString(F("/set_ip"), text);  
         IPAddress _ip;
-        saveConfiguration = setIpAddress(text);
-        if(!saveConfiguration){
-          sendMsg(chat_id, F("Problem with provided IP ADDRESS, maybe incorrect format"));
+        result = setIpAddress(text);
+        if(!result){
+          sendMsg(chat_id, F("Problem with provided mac, maybe incorrect format"));
         }
     }
     else if (text == F("/show_settings")) {
@@ -149,18 +157,18 @@ bool previosSettingsMode = SETTINGS_MODE;
     }
     else if (text =="/wol"){
         sendWOLPacket();
-        sendMsg(chat_id, "Se ha enviado un paquete WOL");
+        sendMsg(chat_id, "Se ha enviado un paquete magico");
     }
     
     else if (text == "/ping"){
         if ( pingIp() ) {
-          sendMsg(chat_id, "Computer is ONLINE");
+          sendMsg(chat_id, "Success pinging");
         } else {
-          sendMsg(chat_id,"Computer is OFFLINE");
+          sendMsg(chat_id,"Error :(,  pinging");
       }
     } 
     //must be last. Executes action based on the command
-    if(saveConfiguration == true){
+    if(result == true){
       saveConfig();
       //TOGGLE SETTINGS MODE BACK
       SETTINGS_MODE = previosSettingsMode;
@@ -241,4 +249,5 @@ if (DEBUG){
     }
   }
   return false;
+}
 }

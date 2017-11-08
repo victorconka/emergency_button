@@ -1,4 +1,11 @@
 /**
+*Este archivo contiene los metodos y procedimientos necesarios para el uso del 
+*modulo de radio NRF24. Configuracion de este y la escucha de mensajes de alerta.
+*/
+
+class nrf24{
+	public:
+/**
  * NRF24
  * initialize nrf module
  */
@@ -17,9 +24,7 @@ if (DEBUG){
   radio.openWritingPipe(address[1]);       // write to button
   radio.openReadingPipe(1,address[0]);     // receive data as server
   radio.startListening();                  // Start listening
-if (DEBUG){
-  radio.printDetails();                  // Dump the configuration of the rf unit for debugging
-}
+  //radio.printDetails();                  // Dump the configuration of the rf unit for debugging
   radio.powerUp();                         //Power up the radio
 }
 
@@ -42,4 +47,4 @@ void listenNRF(){
       radio.writeAckPayload(pipeNo,&gotByte, 1 );
   }
 }
-
+}

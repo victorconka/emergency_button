@@ -1,0 +1,1 @@
+web pages are first edited in html format and then converted into json variables in data folder.

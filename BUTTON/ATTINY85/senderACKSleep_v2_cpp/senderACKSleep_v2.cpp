@@ -7,10 +7,12 @@
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 
+class buton{
 //these pins are never used.
 //configuration necessary to activate 3 pin configuration.
 #define CE_PIN 3
 #define CSN_PIN 3 //IF we are using 3 pin configuration we will use same pin for both CE and CSN, E.G. pin 3
+
 #define BTN_PIN 3 // if used a differen button to pb3, sleep interrupt button needs to be changed
 #define NRF_VCC_PIN 4 //pin that powers nrf24l01.
 
@@ -151,3 +153,4 @@ void loop(void){
   // ActivateAlarm
   activateAlarm();
 }
+};

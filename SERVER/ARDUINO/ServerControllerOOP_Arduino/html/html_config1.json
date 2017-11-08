@@ -1,0 +1,3 @@
+{
+"login":"<html><body><form action='/' method='POST'>To log in, please use : admin/admin<br>\r\n<label style=\"display: inline-block; width: 75\">User:</label><input type='text' name='USERNAME' placeholder='user name'><br>\r\n<label style=\"display: inline-block; width: 75\">Password:</label><input type='password' name='PASSWORD' placeholder='password'><br>\r\n<p>msg</p>\r\n<input type='submit' name='SUBMIT' value='Submit'></form>\r\n</body></html>\r\n"
+}

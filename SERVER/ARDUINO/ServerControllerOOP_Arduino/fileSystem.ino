@@ -1,3 +1,4 @@
+class fileSystem{
 /**
  * Initialize spiffs file system and load
  * stored data.
@@ -107,7 +108,7 @@ if (DEBUG){
 Serial.println(F("Failed to parse config file"));
 }
     return false;
-  }else{
+  }else{  
     //RECOVER VALUES FROM MEMORY
 if (DEBUG){
 Serial.println(F("Success parse config file. recovering values."));
@@ -497,3 +498,4 @@ Serial.println(F("settingsToString()"));
   settings += computer_ip;
 
 }
+};

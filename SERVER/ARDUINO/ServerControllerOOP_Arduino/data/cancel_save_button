@@ -1,0 +1,3 @@
+{
+"cancel_save_button":"<input type=\"submit\" name=\"submit\" value=\"SAVE\"><input type=\"submit\" name=\"submit\" value=\"CANCEL\">"
+}

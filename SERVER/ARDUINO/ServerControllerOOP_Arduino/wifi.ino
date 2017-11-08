@@ -1,7 +1,24 @@
+class wifi{
+
+/**
+ * WIFI MUST DEFINE VARIABLES
+ */
+WiFiManager wifiManager;                              // WIFI MANAGER POINTER TO THE OBJECT
+WiFiUDP UDP;                                          // WOL UDP object
+String computer_ip;                                   // WOL ip of the pc you want to wake up
+IPAddress _ip;                                        // WOL
+String default_ip = "192.168.1.1";                    // ip address in case provided one doesn't work
+byte wol_mac[6];                                      // WOL Gigabyte miniPC 
+String ssid;                                          // your network SSID (name)
+String password;                                      // your network key
+String wifiApName;                                    // SSID for the access point
+String wifiApPassword;                                // password for the access point
+
 void setupWifi(){
 if (DEBUG){
 Serial.println(F("setupWifi()"));
 }
+  //wifiManager.reset(new WiFiManager);
   //set up ip address of the host we want to Wake on Lan
   setIpAddress(computer_ip);
   UDP.begin(9); 
@@ -123,5 +140,4 @@ void sendWOLPacket(){
  IPAddress wol_ip(0,0,0,0);
  WakeOnLan::sendWOL(wol_ip, UDP, wol_mac, sizeof wol_mac);
 }
-
-
+};

@@ -1,7 +1,16 @@
+/**
+* Este archivo contiene los metodos y procedimientos necesarios para el correcto 
+* funcionamiento y conexión a wifi al igual que las funciones relacionadas con
+* el envío de paquetes WOL o PING.
+*/
+
+class wifi{
+	public:
 void setupWifi(){
 if (DEBUG){
 Serial.println(F("setupWifi()"));
 }
+  //wifiManager.reset(new WiFiManager);
   //set up ip address of the host we want to Wake on Lan
   setIpAddress(computer_ip);
   UDP.begin(9); 
@@ -123,5 +132,4 @@ void sendWOLPacket(){
  IPAddress wol_ip(0,0,0,0);
  WakeOnLan::sendWOL(wol_ip, UDP, wol_mac, sizeof wol_mac);
 }
-
-
+}
