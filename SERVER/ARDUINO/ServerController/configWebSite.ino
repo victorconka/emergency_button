@@ -67,6 +67,7 @@ void handleUsers(){
         Serial.println(F("CANCEL pressed"));
       }else if(server->arg(F("submit")) == "SAVE"){
         Serial.println(F("SAVE pressed"));
+        
         DEBUG = server->hasArg(F("DEBUG"));
         computer_ip = server->arg(F("computer_ip"));
         setWolMac(server->arg(F("wol_mac")));
@@ -76,12 +77,14 @@ void handleUsers(){
         ifttt_event_name = server->arg(F("ifttt_event_name"));
         telegram_bot_token = server->arg(F("telegram_bot_token"));
         telegram_group = server->arg(F("telegram_group"));
+      //telegram_contacts
         for(int i = 0; i < 5; i++){
           temp_value =  F("contact");
           temp_value += i+1;
-          temp_value = server->arg(temp_value);
-          setTelegramContact(i+1,temp_value);
+          temp_value = (i+1) + server->arg(temp_value);
+          setTelegramContact(temp_value);
         }
+        //save configuration here.
       }
     }
     

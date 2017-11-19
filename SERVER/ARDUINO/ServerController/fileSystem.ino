@@ -158,6 +158,9 @@ Serial.println(F("finished recovering json into variables"));
  * we can reload it.
  */
 void loadHtmlFiles(){
+  if(DEBUG){
+    Serial.println(F("loadHtmlFiles()"));
+  }
   header = readJsonFile(F("header"));
   header0 = readJsonFile(F("header0"));
   header1 = readJsonFile(F("header1"));
@@ -227,9 +230,10 @@ Serial.println(F("finished recovering json into variables"));
 
 /**
  * Turn on/off serial debug messages
- * char debug - possible values ['0','1'], 0 being false and 1 - true.
+ * String text - value received from telegram. possible values ['0','1'], 0 being false and 1 - true.
  */
-bool setDebug(char debug){
+bool setDebug(String text){
+char debug = text.charAt(0);
 if (DEBUG){
 Serial.println(F("setDebug()"));
 }
@@ -250,11 +254,13 @@ Serial.println(F("debug must be a digit 0 or 1"));
  * Turn on/off SETTINGS MODE.
  * In SETTINGS MODE: TELEGRAM and NRF is disabled,
  *                   OTA and (CONFIGURATION WEBSITE) is enabled.
- * char settingsMode - possible values ['0','1'], 
+ * String text - value received from telegram and cleared.
+ *                     possible values ['0','1'], 
  *                     0 - false (turn off), 
  *                     1 - true (turn on).
  */
-bool setSettingsMode(char settingsMode){
+bool setSettingsMode(String text){
+char settingsMode = text.charAt(0);
 if (DEBUG){
 Serial.println(F("setSettingsMode()"));
 }
@@ -350,10 +356,12 @@ Serial.println(F("setTelegramBotToken()"));
 
 /**
  * Set a telegram contact id
- * char ContactN - position of the contact to set. [1,5]
- * String contact - telegram id of the contact.
+ * String contact - telegram id of the contact in format: "contactN+contactID".
  */
-bool setTelegramContact(int contactN, String contact){
+bool setTelegramContact(String contact){
+  char contactN = contact.charAt(0);
+  contact.remove(0,1);
+
 if (DEBUG){
 Serial.print(F("setTelegramContact() "));
 Serial.print(contactN);
@@ -460,7 +468,6 @@ bool setIpAddress(String ip){
  * Returns a String containing the most important settings
  * 
  */
-String settings;
 void settingsToString(){
 if (DEBUG){
 Serial.println(F("settingsToString()"));

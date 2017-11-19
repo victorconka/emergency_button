@@ -4,10 +4,10 @@
  *  THE LIBRARIES USED. THE EFFORT IS APPRECIATED.
  * 
  *  ALL THE LIBRARIES ARE INCLUDED HERE.
- *  THAT WAY IT IS EASIER TO CONTROL THE ORDER THEY'RE
+ *  THIS WAY IT IS EASIER TO CONTROL THE ORDER THEY'RE
  *  LOADED IN.
  *  
- *  VARIABLES ARE STORED HERE. THAT WAY IT WILL BE IMPOSSIBLE
+ *  VARIABLES ARE STORED HERE. THIS WAY IT WILL BE IMPOSSIBLE
  *  TO MESS UP ACCESSING THEM
  */
 #include "lwip/tcp_impl.h"        // TELEGRAM avoids memory leak.
@@ -56,6 +56,7 @@ String wifiApPassword;                                // password for the access
 /**
  * COMMON VARIABLES
  */
+ String settings;               
 #define blueLed D1              // LED pin
 #define redLed D3               // LED pin
 #define button A0               // Button pin. All the buttons are connected to A0. Buttons are destinguished by different resistor value
@@ -77,10 +78,10 @@ const char* host = "OTA-TBOT";
 #define CE_PIN D2             // NRF CE PIN
 #define CSN_PIN D8            // NRF CSN PIN
 RF24 radio(CE_PIN, CSN_PIN);  // NRF object 
-const byte address[][7] = {"server" , "button"};    // NRF communication roles
 byte pipeNo;                  // pipe Number the message was received from
 byte gotByte;                 // value recieved
 byte gotBytePrev = 0;         // previous value received. needed to keep track of repeated messages
+const byte address[][7] = {"server" , "button"};    // NRF communication roles
 
 /**
  * TELEGRAM VARIABLES
@@ -103,6 +104,12 @@ String ifttt_event_name;     // Name of your event name, set when you are creati
 
 void setup() {
   Serial.begin(115200); 
+  delay(500);
+  pinMode(redLed, OUTPUT);
+  pinMode(blueLed, OUTPUT);
+  digitalWrite(redLed,HIGH);
+  digitalWrite(blueLed,HIGH);
+  
   setupFileSystem();   // initialize FS and load data from internal memory.
   setupWifi();         // initialize wifi
   if(!SETTINGS_MODE){
@@ -120,9 +127,8 @@ void setup() {
     SETTINGS_MODE = true;
   }
   Serial.println(ESP.getFreeHeap());
-  pinMode(redLed, OUTPUT);
-  pinMode(blueLed, OUTPUT);
   digitalWrite(redLed,LOW);
+  digitalWrite(blueLed,LOW);
 }
 
 void loop() {

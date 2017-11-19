@@ -1,33 +1,34 @@
 void setupWifi(){
-if (DEBUG){
-Serial.println(F("setupWifi()"));
-}
   //set up ip address of the host we want to Wake on Lan
   setIpAddress(computer_ip);
   UDP.begin(9); 
 
   //Adding an additional config on the WIFI manager webpage for the bot token
-  char* botToken = string2char(telegram_bot_token);
+  const char* botToken = telegram_bot_token.c_str();
   WiFiManagerParameter custom_bot_id("botid", "TELEGRAM BOT TOKEN", botToken, 50);
   wifiManager.addParameter(&custom_bot_id);
-  char* telegramUser = string2char(telegram_contacts[0]); 
+  
+  const char* telegramUser = telegram_contacts[0].c_str();
   WiFiManagerParameter custom_telegram_user("telegram_user", "TELEGRAM FIRST USER", telegramUser, 21);
   wifiManager.addParameter(&custom_telegram_user);
-
-  //WIFI INITIALIZE WIFI IN AP OR STA MODE
-  char* ap = string2char(wifiApName);
-  char* pass = string2char(wifiApPassword);
   
-  if(!wifiManager.autoConnect(ap, pass)){
-    //TELEGRAM
-    if (DEBUG){
+  if(!wifiManager.autoConnect(wifiApName.c_str(), wifiApPassword.c_str())){
       Serial.println(F("entered autoconnect"));
+  }else{
+    String recovered_bot_id(custom_bot_id.getValue());
+    String recovered_telegram_user(custom_telegram_user.getValue());
+    bool save = false;
+    
+    if(recovered_bot_id != telegram_bot_token){
+      telegram_bot_token = recovered_bot_id;
+      save = true;
     }
-    telegram_bot_token = custom_bot_id.getValue();
-    ifttt_event_name = custom_telegram_user.getValue();
-    if (DEBUG){
-      Serial.println(custom_bot_id.getValue());
-      Serial.println(custom_telegram_user.getValue());
+    if(recovered_telegram_user != telegram_contacts[0]){
+      telegram_contacts[0] = recovered_telegram_user;
+      save = true;
+    }
+    if(save){
+      saveConfig();
     }
   } 
 }
@@ -123,5 +124,3 @@ void sendWOLPacket(){
  IPAddress wol_ip(0,0,0,0);
  WakeOnLan::sendWOL(wol_ip, UDP, wol_mac, sizeof wol_mac);
 }
-
-

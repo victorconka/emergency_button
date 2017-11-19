@@ -111,17 +111,3 @@ void toggle(char color){
     }
   }
 }
-
-/**
- * COMMON
- * convert string to char array
- */
-char* string2char(String command){
-    if (DEBUG){
-      Serial.println(F("string2char()")); 
-    }
-    if(command.length()!=0){
-        char *p = const_cast<char*>(command.c_str());
-        return p;
-    }
-}

@@ -93,13 +93,11 @@ bool previosSettingsMode = SETTINGS_MODE;
     }
     else if( text.indexOf(F("/set_contact")) == 0 ){
         text = clearString(F("/set_contact"), text);
-        char contactN = text.charAt(0);
-          if (DEBUG){
-            Serial.print(F("cleared char: "));
-            Serial.println(contactN);
-          }
-        text.remove(0,1);
-        saveConfiguration = setTelegramContact(contactN,text);
+        saveConfiguration = setTelegramContact(text);
+    }
+    else if( text.indexOf(F("/set_telegram_token")) == 0 ){
+        text = clearString(F("/set_telegram_token"), text);
+        saveConfiguration = setTelegramBotToken(text);
     }
     else if( text.indexOf(F("/set_ifttt_key")) == 0 ){
         text = clearString(F("/set_ifttt_key"), text);
@@ -118,14 +116,12 @@ bool previosSettingsMode = SETTINGS_MODE;
         saveConfiguration = setWifiApPassword(text);
     }
     else if( text.indexOf(F("/set_debug")) == 0 ){
-        text = clearString(F("/set_debug"), text);
-        char debug = text.charAt(0);
-        saveConfiguration = setDebug(debug);
+        text = clearString(F("/set_debug"), text);   
+        saveConfiguration = setDebug(text);
     }
    else if( text.indexOf(F("/set_settings_mode")) == 0 ){
         text = clearString(F("/set_settings_mode"), text);
-        char settings_mode = text.charAt(0);
-        saveConfiguration = setSettingsMode(settings_mode);
+        saveConfiguration = setSettingsMode(text);
     }
     else if( text.indexOf(F("/set_mac")) == 0 ){
         text = clearString(F("/set_mac"), text);
@@ -134,9 +130,8 @@ bool previosSettingsMode = SETTINGS_MODE;
           sendMsg(chat_id, F("Problem with provided MAC ADDRESS, maybe incorrect format"));
         }
     }
-    else if( text.indexOf(F("/set_ip")) == 0 ){
+    else if( text.indexOf(F(" ")) == 0 ){
         text = clearString(F("/set_ip"), text);  
-        IPAddress _ip;
         saveConfiguration = setIpAddress(text);
         if(!saveConfiguration){
           sendMsg(chat_id, F("Problem with provided IP ADDRESS, maybe incorrect format"));
@@ -154,7 +149,7 @@ bool previosSettingsMode = SETTINGS_MODE;
     
     else if (text == "/ping"){
         if ( pingIp() ) {
-          sendMsg(chat_id, "Computer is ONLINE");
+          sendMsg(chat_id,"Computer is ONLINE");
         } else {
           sendMsg(chat_id,"Computer is OFFLINE");
       }
