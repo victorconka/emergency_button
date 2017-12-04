@@ -1,0 +1,28 @@
+Partlist
+
+Exported from Server.sch at 20/11/2017 18:09
+
+EAGLE Version 8.4.2 Copyright (c) 1988-2017 Autodesk, Inc.
+
+Assembly variant: 
+
+Part                    Value             Device            Package           Library       Sheet
+
+BLUE_5V                                   LED5MM            LED5MM            led           1
+BUTTON_1                5501              5501              5501              switch        1
+BUTTON_2                5501              5501              5501              switch        1
+BUTTON_3                5501              5501              5501              switch        1
+BUTTON_4                5501              5501              5501              switch        1
+BUTTON_5                5501              5501              5501              switch        1
+C1                      1000uF            EL-BI35-12AXIAL   EU35-12           rcl           1
+M1                      WIRELESS-NRF24L01 WIRELESS-NRF24L01 WIRELESS-NRF24L01 diy-modules   1
+R1                      10k               R0207/10          0207/10           eagle-ltspice 1
+R2                      68K               R0207/10          0207/10           eagle-ltspice 1
+R3                      220K              R0207/10          0207/10           eagle-ltspice 1
+R4                      470K              R0207/10          0207/10           eagle-ltspice 1
+R5                      680K              R0207/10          0207/10           eagle-ltspice 1
+R6                      1M                R0207/10          0207/10           eagle-ltspice 1
+R7(PULL_DOWN_V_DIVIDER) 47k               R0207/10          0207/10           eagle-ltspice 1
+RED_5V                                    LED5MM            LED5MM            led           1
+RESET_BTN               5501              5501              5501              switch        1
+U$1                     WEMOS-D1-MINI     WEMOS-D1-MINI     WEMOS-D1-MINI     diy-modules   1

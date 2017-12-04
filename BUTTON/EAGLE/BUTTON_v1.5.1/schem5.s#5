@@ -4210,7 +4210,7 @@ Source: www.kingbright.com</description>
 <instance part="SUPPLY8" gate="GND" x="-15.24" y="106.68"/>
 <instance part="P+2" gate="VCC" x="-27.94" y="106.68" rot="R180"/>
 <instance part="LED1" gate="G$1" x="83.82" y="81.28" rot="R90"/>
-<instance part="G1" gate="1" x="12.7" y="60.96" rot="R180"/>
+<instance part="G1" gate="1" x="0" y="109.22" rot="R270"/>
 </instances>
 <busses>
 </busses>

@@ -137,6 +137,11 @@ bool previosSettingsMode = SETTINGS_MODE;
           sendMsg(chat_id, F("Problem with provided IP ADDRESS, maybe incorrect format"));
         }
     }
+    else if (text == F("/resetWifiSettings")) {
+      //remove message before resetting configuration.
+        numNewMessages = bot->getUpdates(bot->last_message_received + 1);
+        resetWifiSettings();
+    }
     else if (text == F("/show_settings")) {
         settingsToString();
         sendMsg(chat_id, settings);
@@ -196,7 +201,6 @@ if (DEBUG){
  * TELEGRAM
  * listen for new telegram messages
  */
-uint8_t numNewMessages;
 void listenTelegram(){
   if (millis() > Bot_lasttime + Bot_mtbs)  {
     numNewMessages = bot->getUpdates(bot->last_message_received + 1);

@@ -18,3 +18,4 @@ set_mac - set MAC addres of device to Wake On Lan.
 set_ip - set IP addres of device to Wake On Lan.
 wol - send WOL packet.
 ping - send ping packets.
+resetWifiSettings - deletes wifi configuration.

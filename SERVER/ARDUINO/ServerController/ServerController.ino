@@ -88,6 +88,7 @@ const byte address[][7] = {"server" , "button"};    // NRF communication roles
  */
 WiFiClientSecure client;                   //client used by ifttt and telegram
 std::unique_ptr<UniversalTelegramBot> bot; // pointer to the bot
+uint8_t numNewMessages;                    // number of incomming messages
 const uint8_t numContacts = 5;             //number of telegram contacts stored
 String EMPTY = "empty";                    //value used when null, deleted, etc...
 String telegram_contacts[numContacts];     //telegram contact container.
@@ -103,21 +104,22 @@ String ifttt_key;            // Get it from this page https://ifttt.com/services
 String ifttt_event_name;     // Name of your event name, set when you are creating the applet
 
 void setup() {
-  Serial.begin(115200); 
-  delay(500);
   pinMode(redLed, OUTPUT);
   pinMode(blueLed, OUTPUT);
   digitalWrite(redLed,HIGH);
   digitalWrite(blueLed,HIGH);
   
   setupFileSystem();   // initialize FS and load data from internal memory.
+  if(DEBUG){
+      Serial.begin(115200); 
+   }
   setupWifi();         // initialize wifi
   if(!SETTINGS_MODE){
     Serial.println("loading nrf and telegram");
     ESP.wdtDisable();
     ESP.wdtEnable(WDTO_8S);
     setupNRF();       // initialize nrf module
-    setupTelegram();  // initialize telegram  
+    setupTelegram();  // initialize telegram
   }else{
     setupWebServer();
     setupOTA();    
@@ -131,13 +133,26 @@ void setup() {
   digitalWrite(blueLed,LOW);
 }
 
+int n = 0;
 void loop() {
+  //if-else thing put here to test if
+  // it will help to avoid exception 29 problem.
   if(!SETTINGS_MODE){
     //normal, non settings mode.
+    n++;
+    if(n == 1 || n == 3){
     readButtons(); //read buttons
+    }
+    else if(n == 2){
     listenNRF();
-    readButtons(); //read buttons
+    }
+    //readButtons(); //read buttons
+    else if(n == 4){
     listenTelegram();
+    }
+    else{
+    n = 0;
+    }
     ESP.wdtFeed();
   }else{
     // we're in settings mode

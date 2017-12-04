@@ -240,6 +240,11 @@ Serial.println(F("setDebug()"));
     if(isDigit(debug)){
       if(debug == '0' || debug == '1' ){//bool is 0 or 1
         DEBUG = (debug == '1');
+        if(DEBUG){
+          Serial.begin(115200);
+        }else{
+          Serial.end();
+        }
         return true;
       }
     }else{
@@ -502,5 +507,7 @@ Serial.println(F("settingsToString()"));
   settings += macToString(wol_mac);
   settings += F("\nComputer IP: ");
   settings += computer_ip;
+  settings += F("\nFree heap:");
+  settings += ESP.getFreeHeap();
 
 }
