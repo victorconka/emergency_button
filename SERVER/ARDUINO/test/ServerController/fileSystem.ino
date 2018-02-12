@@ -3,23 +3,15 @@
  * stored data.
  */
 void setupFileSystem(){
-  if (DEBUG){
-    Serial.println(F("setupFileSystem()"));
-  }
+
   if (!SPIFFS.begin()) {
-    if (DEBUG){
-      Serial.println(F("Failed to mount file system"));
-    }
+
     return;
   }
   if (!loadConfig()) {
-    if (DEBUG){
-      Serial.println(F("Failed to load config"));
-    }
+
   } else {
-    if (DEBUG){
-      Serial.println(F("Config loaded"));
-    }
+
   }  
 }
 
@@ -28,17 +20,12 @@ void setupFileSystem(){
  * a json file.
  */
 bool saveConfig() { 
-if (DEBUG){
-Serial.println(F("saveConfig()"));
-}
+
 // must be dynamic buffer, eslewise crashes
   DynamicJsonBuffer jsonBuffer(bufferSize);
   JsonObject& json = jsonBuffer.createObject();
   File configFile = SPIFFS.open("/config.json", "w"); 
-  if (!configFile) {
-      if (DEBUG){
-      Serial.println(F("Failed to open config file for writing"));
-      }
+  if (!configFile) {      
     return false;
   }
   //create array and write data
@@ -64,9 +51,7 @@ Serial.println(F("saveConfig()"));
   json.set(F("ALERT"),ALERT);
   json.set(F("SETTINGS_MODE"),SETTINGS_MODE);
   
-if (DEBUG){
-Serial.println(F("saveConfig() fisnish"));
-}
+
   //write json object to the memory
   json.printTo(configFile);
   
@@ -78,45 +63,31 @@ Serial.println(F("saveConfig() fisnish"));
  * read data from the memory
  */
 bool loadConfig() {
-if (DEBUG){
-Serial.println(F("loadConfig()"));
-}
+
   File configFile = SPIFFS.open("/config.json", "r");
   if (!configFile) {
-if (DEBUG){
-Serial.println(F("Failed to open config file"));
-}
-    return false;
+
+   return false;
   }
   size_t size = configFile.size();
   if (size > bufferSize) {
-if (DEBUG){
-Serial.println(F("Config file size is too large"));
-}
+
     return false;
   }
   std::unique_ptr<char[]> buf(new char[size]);
   configFile.readBytes(buf.get(), size);
-if (DEBUG){
-Serial.println(buf.get());
-}
+
   DynamicJsonBuffer jsonBuffer(bufferSize);
   JsonObject& json = jsonBuffer.parseObject(buf.get());
   if (!json.success()) {
-if (DEBUG){
-Serial.println(F("Failed to parse config file"));
-}
+
     return false;
   }else{
     //RECOVER VALUES FROM MEMORY
-if (DEBUG){
-Serial.println(F("Success parse config file. recovering values."));
-}
+
     String mac = json["wol_mac"].as<String>();
     bool macBool = setWolMac(mac);
-if (DEBUG && !macBool){
-Serial.println(F("MAC Set ERROR"));
-}
+
     SETTINGS_MODE = json["SETTINGS_MODE"].as<bool>();
     computer_ip = json["computer_ip"].as<String>();
     wifiApName = json["wifiApName"].as<String>();
@@ -138,9 +109,8 @@ Serial.println(F("MAC Set ERROR"));
         telegram_contacts[i] = EMPTY;  
       }  
     }    
-if (DEBUG){
-Serial.println(F("finished recovering json into variables"));
-}    
+
+ 
   } 
   jsonBuffer.clear();
   configFile.close();
@@ -158,9 +128,7 @@ Serial.println(F("finished recovering json into variables"));
  * we can reload it.
  */
 void loadHtmlFiles(){
-  if(DEBUG){
-    Serial.println(F("loadHtmlFiles()"));
-  }
+
   header = readJsonFile(F("header"));
   header0 = readJsonFile(F("header0"));
   header1 = readJsonFile(F("header1"));
@@ -175,29 +143,22 @@ void loadHtmlFiles(){
  */
 String readJsonFile(String string) {
     String ret;
-if (DEBUG){
-Serial.print(F("readJsonFile("));
-Serial.print(string);
-Serial.println(F(")"));
-}
+
+
     String filename = "/" + string;
     File configFile = SPIFFS.open(filename, "r");
   
     if (!configFile) {
-if (DEBUG){
-Serial.println(F("Failed to open file"));
-}
+
+
       return "";
     }else{   
     size_t size = configFile.size();
-if (DEBUG){
-Serial.print("HTML file size: ");
-Serial.println(size);
-}
+
+
     if (size > bufferSize) {
-if (DEBUG){
-Serial.println(F("File size is too large"));
-}
+
+
       return "";
     }
     // Allocate a buffer to store contents of the file.
@@ -208,18 +169,13 @@ Serial.println(F("File size is too large"));
     JsonObject& json = jsonBuffer.parseObject(buf.get());
     
     if (!json.success()) {
-if (DEBUG){
-Serial.println(F("Failed to parse config file"));
-}
+
+
     return "";
     }else{  
-if (DEBUG){
-Serial.println(F("Success parse config file. recovering values."));
-}     
+    
     ret = json[string].as<String>(); 
-if (DEBUG){
-Serial.println(F("finished recovering json into variables"));
-}    
+
     } 
     jsonBuffer.clear();
     configFile.close();
@@ -227,31 +183,28 @@ Serial.println(F("finished recovering json into variables"));
   }
 }
 
+
 /**
  * Turn on/off serial debug messages
  * String text - value received from telegram. possible values ['0','1'], 0 being false and 1 - true.
  */
 bool setDebug(String text){
 char debug = text.charAt(0);
-if (DEBUG){
-Serial.println(F("setDebug()"));
-}
+
     if(isDigit(debug)){
       if(debug == '0' || debug == '1' ){//bool is 0 or 1
         DEBUG = (debug == '1');
         if(DEBUG){
-          Serial.begin(115200);
+          
           wifiManager.setDebugOutput(true);
         }else{
-          Serial.end();
-          wifiManager.setDebugOutput(false);        
+          wifiManager.setDebugOutput(false);
+       
         }
         return true;
       }
     }else{
-if (DEBUG){
-Serial.println(F("debug must be a digit 0 or 1"));
-}
+
     }
     return false;
 }
@@ -267,18 +220,16 @@ Serial.println(F("debug must be a digit 0 or 1"));
  */
 bool setSettingsMode(String text){
 char settingsMode = text.charAt(0);
-if (DEBUG){
-Serial.println(F("setSettingsMode()"));
-}
+
+
     if(isDigit(settingsMode)){
       if(settingsMode == '0' || settingsMode == '1' ){//settingsMode MUST BE 0 or 1
         SETTINGS_MODE = (settingsMode == '1');
         return true;
       }
     }else{
-if (DEBUG){
-Serial.println(F("settingsMode must be a digit 0 or 1"));
-}
+
+
     }
     return false;
 }
@@ -289,9 +240,7 @@ Serial.println(F("settingsMode must be a digit 0 or 1"));
  * String wifiPassword - AP password
  */
 bool setWifiApPassword(String wifiPassword){
-if (DEBUG){
-Serial.println(F("setWifiPassword()"));
-}
+
   if(wifiPassword != ""){
     wifiApPassword = wifiPassword;
     return true;
@@ -305,9 +254,7 @@ Serial.println(F("setWifiPassword()"));
  * String apName - AP SSID
  */
 bool setWifiApName(String apName){
-if (DEBUG){
-Serial.println(F("setWifiName()"));
-}
+
   if(apName != ""){
     wifiApName = apName;
     return true;
@@ -320,9 +267,7 @@ Serial.println(F("setWifiName()"));
  * String eventName - event name
  */
 bool setIftttEventName(String eventName){
-if (DEBUG){
-Serial.println(F("setIftttEventName()"));
-}
+
   if(eventName != ""){
     ifttt_event_name = eventName;
     return true;
@@ -335,9 +280,7 @@ Serial.println(F("setIftttEventName()"));
  * String key - key
  */
 bool setIftttKey(String key){
-if (DEBUG){
-Serial.println(F("setIftttKey()"));
-}
+
   if(key != ""){
     ifttt_key = key;
     return true;
@@ -350,9 +293,7 @@ Serial.println(F("setIftttKey()"));
  * String key - key
  */
 bool setTelegramBotToken(String botToken){
-if (DEBUG){
-Serial.println(F("setTelegramBotToken()"));
-}
+
   if(botToken != ""){
     telegram_bot_token = botToken;
     return true;
@@ -368,12 +309,7 @@ bool setTelegramContact(String contact){
   char contactN = contact.charAt(0);
   contact.remove(0,1);
 
-if (DEBUG){
-Serial.print(F("setTelegramContact() "));
-Serial.print(contactN);
-Serial.print(" ");
-Serial.println(contact);
-}
+
     if(contactN > 0){
       if(!containsUser(contact)){
         contactN -=1;
@@ -386,14 +322,12 @@ Serial.println(contact);
           return true;
         }
       }else{
-        if (DEBUG){
-        Serial.println(F("Contact already present"));  
-        }
+
+    
       }
     }else{
-if (DEBUG){
-Serial.println(F("Contact number <= 0"));
-}  
+
+  
     }
     return false;
 }
@@ -403,9 +337,7 @@ Serial.println(F("Contact number <= 0"));
  * String group - id of the telegram group
  */
 bool setTelegramGroup(String group){
-if (DEBUG){
-Serial.println(F("setTelegramGroup()"));
-}
+
   if(group != ""){
     telegram_group = group;
     return true;
@@ -417,9 +349,7 @@ Serial.println(F("setTelegramGroup()"));
  * Set wol mac
  */
 bool setWolMac(String stringMac){
-if (DEBUG){
-Serial.println(F("setWolMac()"));
-}
+
   byte mac[6];
   bool ret = macToByteArray(stringMac, mac);
   if(ret){
@@ -433,10 +363,7 @@ Serial.println(F("setWolMac()"));
  * String user_id - user id.
  */
 bool containsUser(String user_id){
-if (DEBUG){
-Serial.print(F("containsUser() "));
-Serial.println(">" + user_id + "<");
-}
+
   if(user_id ==  EMPTY || user_id == ""){
     return false;
   }
@@ -475,15 +402,11 @@ bool setIpAddress(String ip){
  * 
  */
 void settingsToString(){
-if (DEBUG){
-Serial.println(F("settingsToString()"));
-}
+
   settings = F("DEBUG: ");
   settings += DEBUG;
   settings += F("\nSETTINGS_MODE: ");
   settings += SETTINGS_MODE;
-  settings += F("\nServer IP: ");
-  settings += WiFi.localIP().toString();
   settings += F("\n   TELEGRAM");
   settings += F("\n   Bot Token: ");
   settings += telegram_bot_token;
@@ -508,7 +431,7 @@ Serial.println(F("settingsToString()"));
   settings += F("\n  Wake On Lan");
   settings += F("\nMAC: ");
   settings += macToString(wol_mac);
-  settings += F("\nComputer PING IP: ");
+  settings += F("\nComputer IP: ");
   settings += computer_ip;
   settings += F("\nFree heap:");
   settings += ESP.getFreeHeap();

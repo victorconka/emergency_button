@@ -1,7 +1,5 @@
 void alert(){
-if (DEBUG){
-  Serial.println(F("alert()"));
-}
+
   toggle('b');
   //ENABLE ALERT AND SAVE CONFIGURATION TO INTERNAL MEMORY
   ALERT = true;
@@ -47,10 +45,7 @@ void readButtons(){
         btn = btnStable;  
       }
     }
-    if (DEBUG){
-      Serial.print(F("Button value: "));
-      Serial.println(btn);
-    }
+
     if(btn == 5){
       btn = 4;
     }else if(btn == 8 || btn == 7 || btn == 6){// 6&7&8 HAVE SIMILAR RESISTOR VALUES
@@ -78,9 +73,7 @@ void readButtons(){
  * Turn led on and off
  */
 void toggleOnce(char ledColor){
-if (DEBUG){
-  Serial.println(F("toggleOnce()"));
-}   
+
   toggle(ledColor);
   delay(300);
   toggle(ledColor);
@@ -91,11 +84,7 @@ if (DEBUG){
  *  Toggle led from low to high and viceversa 
  */
 void toggle(char color){
-  
-    if (DEBUG){
-    Serial.println(F("toggle()")); 
-    Serial.println(ESP.getFreeHeap()); 
-    }
+
   if(ledState){
     ledState = false;  
     if(color == 'b'){

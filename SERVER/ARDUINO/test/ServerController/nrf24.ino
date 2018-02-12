@@ -3,9 +3,7 @@
  * initialize nrf module
  */
 void setupNRF(){
-if (DEBUG){
-  Serial.println(F("setupNRF()"));
-}
+
   radio.begin();                           // Setup and configure rf radio
   radio.setChannel(126);
   radio.setPALevel(RF24_PA_MAX);

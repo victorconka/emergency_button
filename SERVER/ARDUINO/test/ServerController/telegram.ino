@@ -25,13 +25,7 @@ void tcpCleanup()
  * returns false if message was not sent
  */
 bool sendMsg(String chat_id, String message){
-if (DEBUG){
-Serial.println(F("sendMsg()"));
-Serial.print(F("message to: "));
-Serial.println(chat_id);
-Serial.print(F("ESP.heapSize(): "));
-Serial.println(ESP.getFreeHeap());
-}
+
     bool ret = false;
     bot->sendChatAction(chat_id, "typing");
     ESP.wdtFeed();
@@ -45,11 +39,7 @@ Serial.println(ESP.getFreeHeap());
  * user is not authorized message to execute any action
  */
 void noAutorizado(String chat_id, String from_name){
-if (DEBUG){
-Serial.println(F("noAutorizado()"));
-Serial.print(F("message to: "));
-Serial.println(chat_id);
-}
+
     sendMsg(chat_id, from_name + F("YOU ARE NOT AUTHORIZED"));
     sendMsg(telegram_group, "Unauthorized access from: " + from_name + "with id " + chat_id);
 }
@@ -60,22 +50,14 @@ Serial.println(chat_id);
  * String content - content we want to clear
  */
 String clearString(String command, String content){
-if (DEBUG){
-  Serial.println(F("clearString()"));
-  Serial.print(F("Command: "));
-  Serial.println(command);
-  Serial.print(F("String: "));
-  Serial.println(content);
-}
+
   content.replace(command,F(""));
   content.replace(F("\t"),F(""));
   content.replace(F("\n"),F(""));
   content.replace(F(";") ,F(""));
   content.replace(F(" ") ,F(""));
-if (DEBUG){
-  Serial.print(F("cleared: "));
-  Serial.println(content);
-}
+
+
   return content;
 }
 
@@ -84,13 +66,6 @@ if (DEBUG){
  * actions based on telegram commands
  */
 void actions(String text, String chat_id){
-if (DEBUG){
-  Serial.println(F("actions()"));
-  Serial.print(F("text: "));
-  Serial.println(text);
-  Serial.print(F("chat_id: "));
-  Serial.println(chat_id);
-}
 bool saveConfiguration = false;
 bool previosSettingsMode = SETTINGS_MODE;
     if( text.indexOf(F("/set_telegram_group")) == 0 ){
@@ -178,9 +153,7 @@ bool previosSettingsMode = SETTINGS_MODE;
  * handle messages and execute corresponding actions
  */
 void handleNewMessages(int numNewMessages) {
-if (DEBUG){
-  Serial.println(F("handleNewMessages()"));
-}
+
   String chat_id;
   String text;
   String from_name;
@@ -224,9 +197,7 @@ void listenTelegram(){
  * Initialize telegram.
  */
 void setupTelegram(){
-if (DEBUG){
-  Serial.println(F("setupTelegram()"));
-}
+
   bot.reset(new UniversalTelegramBot(telegram_bot_token, client));
   
   String message = "Online with IP: ";
@@ -235,10 +206,7 @@ if (DEBUG){
 }
 
 bool contactPerson(uint8_t contact_number){
-if (DEBUG){
-  Serial.print(F("contactPerson() -> Nº= "));
-  Serial.println(contact_number);
-}
+
   if (contact_number > 0 && contact_number < 6){
     contact_number-=1;
     if(containsUser(telegram_contacts[contact_number])){

@@ -108,20 +108,18 @@ void setup() {
   pinMode(blueLed, OUTPUT);
   digitalWrite(redLed,HIGH);
   digitalWrite(blueLed,HIGH);
-  setDebug("0");
+  wifiManager.setDebugOutput(false);
   
   setupFileSystem();   // initialize FS and load data from internal memory.
-  
   if(DEBUG){
-    setDebug("1");
-  }
+    wifiManager.setDebugOutput(true);
+  }  
   setupWifi();         // initialize wifi
   if(!SETTINGS_MODE){
     //modify watchdog interval to 8seconds
     ESP.wdtDisable();
     ESP.wdtEnable(WDTO_8S);
     
-    Serial.println("loading nrf and telegram");
     setupNRF();       // initialize nrf module
     setupTelegram();  // initialize telegram
   }else{
@@ -132,7 +130,6 @@ void setup() {
     saveConfig();
     SETTINGS_MODE = true;
   }
-  Serial.println(ESP.getFreeHeap());
   digitalWrite(redLed,LOW);
   digitalWrite(blueLed,LOW);
 }
