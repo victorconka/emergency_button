@@ -136,7 +136,7 @@ bool previosSettingsMode = SETTINGS_MODE;
           sendMsg(chat_id, F("Problem with provided MAC ADDRESS, maybe incorrect format"));
         }
     }
-    else if( text.indexOf(F(" ")) == 0 ){
+    else if( text.indexOf(F("/set_ip")) == 0 ){
         text = clearString(F("/set_ip"), text);  
         saveConfiguration = setIpAddress(text);
         if(!saveConfiguration){
@@ -166,6 +166,10 @@ bool previosSettingsMode = SETTINGS_MODE;
       }
     } 
     //must be last. Executes action based on the command
+    if (DEBUG){
+      Serial.print("saveConfiguration: ");
+      Serial.println(saveConfiguration);
+    }
     if(saveConfiguration == true){
       saveConfig();
       //TOGGLE SETTINGS MODE BACK

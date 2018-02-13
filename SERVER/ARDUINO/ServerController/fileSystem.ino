@@ -458,6 +458,10 @@ Serial.println(">" + user_id + "<");
  * String ip - new ip address.
  */
 bool setIpAddress(String ip){
+if (DEBUG){
+Serial.print(F("setIpAddress() "));
+Serial.println(">" + ip + "<");
+}
    if(_ip.fromString(ip)){
       computer_ip = ip;
       return true;

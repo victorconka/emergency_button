@@ -121,6 +121,6 @@ bool pingIp(){
  * without checking whom does it belong to and avoid unsent wol packets.
  */
 void sendWOLPacket(){
- IPAddress wol_ip(0,0,0,0);
+ IPAddress wol_ip(255,255,255,255);
  WakeOnLan::sendWOL(wol_ip, UDP, wol_mac, sizeof wol_mac);
 }
