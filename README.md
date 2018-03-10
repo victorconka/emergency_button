@@ -16,18 +16,20 @@
 * Schematics for the circuits (be aware that some of the part libraries were missing, so same shape parts were used.)  
   
 ## Configuration  
-###Server  
-####Schematic:  
+### Server  
+#### Schematic:  
 ![Emergency Button Server Schematic](/imgs/server schematic2.png)  
-####PCB  
+#### PCB  
 ![server protoboard pcb](/imgs/IMG_20171120_180733_227_cr.jpg)  
-###Emergency Button  
-####Schematic  
+### Emergency Button  
+#### Schematic  
 ![emergency button schematic](/imgs/schematic_vck_v1.5.1..png)  
-####PCB Layout  
+#### PCB Layout  
 ![emergency button pcb layout](/imgs/vck_v1.5.1.png)  
-####PCB Implementation  
-|   BACK  |  FRONT   |
-| --- | --- |
-| ![emergency button pcb implementation back](/imgs/IMG_20171120_164349_951.jpg) | ![emergency button pcb implementation fron](/imgs/IMG_20171120_163525_609.jpg)   |
+#### PCB Implementation  
+##### BACK
+![emergency button pcb implementation back](/imgs/IMG_20171120_164349_951.jpg)  
+##### FRONT
+![emergency button pcb implementation fron](/imgs/IMG_20171120_163525_609.jpg)  
+
 
