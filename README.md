@@ -1,8 +1,9 @@
-# emergency_button  
+# Emergency Button  
 "emergency button" project based on attiny85, nrf24l01, esp8266 based devboard, telegram and email API's  
+![Server and Emergency Button](http://)  
 Main funcions:  
 *     	Attend Telegram Commands.  
-*     	Telegram Authorization.  
+*     	Telegram Authorization (access control).  
 *     	Listen for the Alert button being pressed.  
 *     	Send WOL packet to the PC.  
 *     	Send Ping packets to the configured IP Address.  

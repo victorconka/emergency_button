@@ -243,8 +243,8 @@ Serial.println(F("setDebug()"));
           Serial.begin(115200);
           wifiManager.setDebugOutput(true);
         }else{
-          Serial.end();
-          wifiManager.setDebugOutput(false);        
+          wifiManager.setDebugOutput(false);
+          Serial.end();          
         }
         return true;
       }
@@ -365,7 +365,7 @@ Serial.println(F("setTelegramBotToken()"));
  * String contact - telegram id of the contact in format: "contactN+contactID".
  */
 bool setTelegramContact(String contact){
-  char contactN = contact.charAt(0);
+  int contactN = contact.charAt(0) - '0'; //char to int
   contact.remove(0,1);
 
 if (DEBUG){
@@ -376,11 +376,15 @@ Serial.println(contact);
 }
     if(contactN > 0){
       if(!containsUser(contact)){
+        //Serial.println("!containsUser");
         contactN -=1;
-        if(contactN  < 5){//n is inside the necessary range
+        if(contactN < 5){//n is inside the necessary range
+          //Serial.println(F("contactN<5"));
           if(contact == EMPTY || contact == "" || contact == NULL){
+            //Serial.println(F("null"));
             telegram_contacts[contactN] = EMPTY;
           }else{
+            //Serial.println(F("set contact"));
             telegram_contacts[contactN] = contact;
           }
           return true;
@@ -391,9 +395,9 @@ Serial.println(contact);
         }
       }
     }else{
-if (DEBUG){
-Serial.println(F("Contact number <= 0"));
-}  
+      if (DEBUG){
+      Serial.println(F("Contact number <= 0"));
+      }  
     }
     return false;
 }

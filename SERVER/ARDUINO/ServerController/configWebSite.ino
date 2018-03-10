@@ -23,24 +23,26 @@ void setupWebServer(){
   //ask server to track these headers
   server->collectHeaders(headerkeys, headerkeyssize );
   server->begin();
-  Serial.println(F("HTTP server started"));
+  //Serial.println(F("HTTP server started"));
 }
 
 /**
  * Verify user authentication
  */
 bool is_authentified(){
-  Serial.println(F("Enter is_authentified()"));
+  if(DEBUG){
+    Serial.println(F("is_authentified()"));
+  }
   if (server->hasHeader(F("Cookie"))){   
-    Serial.print(F("Found cookie: "));
+    //Serial.print(F("Found cookie: "));
     String cookie = server->header(F("Cookie"));
-    Serial.println(cookie);
+    //Serial.println(cookie);
     if (cookie.indexOf(F("ESPSESSIONID=1")) != -1) {
-      Serial.println(F("Authentification Successful"));
+      //Serial.println(F("Authentification Successful"));
       return true;
     }
   }
-  Serial.println(F("Authentification Failed"));
+  //Serial.println(F("Authentification Failed"));
   return false;  
 }
 
@@ -64,9 +66,9 @@ void handleUsers(){
         read_mode_debug = F("");
         button =  readJsonFile(F("cancel_save_button"));
       }else if(server->arg(F("submit")) == "CANCEL"){
-        Serial.println(F("CANCEL pressed"));
+        //Serial.println(F("CANCEL pressed"));
       }else if(server->arg(F("submit")) == "SAVE"){
-        Serial.println(F("SAVE pressed"));
+        //Serial.println(F("SAVE pressed"));
         
         DEBUG = server->hasArg(F("DEBUG"));
         computer_ip = server->arg(F("computer_ip"));
@@ -78,13 +80,19 @@ void handleUsers(){
         telegram_bot_token = server->arg(F("telegram_bot_token"));
         telegram_group = server->arg(F("telegram_group"));
       //telegram_contacts
+        bool saveConfiguration = false;
         for(int i = 0; i < 5; i++){
           temp_value =  F("contact");
           temp_value += i+1;
           temp_value = (i+1) + server->arg(temp_value);
-          setTelegramContact(temp_value);
+          if(setTelegramContact(temp_value) == true){
+            saveConfiguration = true;
+          }
         }
         //save configuration here.
+        if(saveConfiguration){
+          saveConfig();
+        }
       }
     }
     
@@ -118,26 +126,29 @@ void handleUsers(){
 
 //login page, also called for disconnect
 void handleLogin(){
+  if(DEBUG){
+    Serial.print(F("handleLogin()"));
+  }
   String login_res = login;
   String msg = "";
   if (server->hasHeader(F("Cookie"))){   
-    Serial.print(F("Found cookie: "));
+    //Serial.print(F("Found cookie: "));
     String cookie = server->header(F("Cookie"));
-    Serial.println(cookie);
+    //Serial.println(cookie);
   }
   if (server->hasArg(F("DISCONNECT"))){
-    Serial.println(F("Disconnection"));
+    //Serial.println(F("Disconnection"));
     server->sendContent(header0);
     return;
   }
   if (server->hasArg(F("USERNAME")) && server->hasArg(F("PASSWORD"))){
     if (server->arg(F("USERNAME")) == F("admin") &&  server->arg(F("PASSWORD")) == F("admin") ){
       server->sendContent(header1);
-      Serial.println(F("Log in Successful"));
+      //Serial.println(F("Log in Successful"));
       return;
     }
   msg = wrong_user;
-  Serial.println(F("Log in Failed"));
+  //Serial.println(F("Log in Failed"));
   }
   //form action must point to this same url, so that cookie reading is done properly
   login_res.replace(F("msg"),msg);
@@ -149,5 +160,8 @@ void handleLogin(){
  * show 404 page.
  */
 void handleNotFound(){
+  if(DEBUG){
+    Serial.print(F("handleNotFound()"));
+  }
   server->send(404, F("text/html"), error_404);
 }

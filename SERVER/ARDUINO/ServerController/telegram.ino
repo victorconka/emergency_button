@@ -218,6 +218,7 @@ void listenTelegram(){
     while(numNewMessages) {
       handleNewMessages(numNewMessages);
       numNewMessages = bot->getUpdates(bot->last_message_received + 1);
+      tcpCleanup();  //THIS IS SUPER IMPORTANT. SOLVES MEMORY LEAK
     }
     Bot_lasttime = millis();
   }  

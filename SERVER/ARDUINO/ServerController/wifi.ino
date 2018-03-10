@@ -13,7 +13,7 @@ void setupWifi(){
   wifiManager.addParameter(&custom_telegram_user);
   
   if(!wifiManager.autoConnect(wifiApName.c_str(), wifiApPassword.c_str())){
-      Serial.println(F("entered autoconnect"));
+      //Serial.println(F("entered autoconnect"));
   }else{
     String recovered_bot_id(custom_bot_id.getValue());
     String recovered_telegram_user(custom_telegram_user.getValue());
@@ -117,8 +117,8 @@ bool pingIp(){
 
 /**
  * Send Wake on Lan packet to wake up the configured pc
- * packet is sent to 0.0.0.0, that way router will directly send WOL packet
- * without checking whom does it belong to and avoid unsent wol packets.
+ * packet is sent to 255,255,255,255, that way router will directly send WOL packet
+ * without checking whom does it belong to and avoid unsent wol packets (broadcast).
  */
 void sendWOLPacket(){
  IPAddress wol_ip(255,255,255,255);

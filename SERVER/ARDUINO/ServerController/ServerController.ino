@@ -104,11 +104,11 @@ String ifttt_key;            // Get it from this page https://ifttt.com/services
 String ifttt_event_name;     // Name of your event name, set when you are creating the applet
 
 void setup() {
+  setDebug("0");
   pinMode(redLed, OUTPUT);
   pinMode(blueLed, OUTPUT);
   digitalWrite(redLed,HIGH);
   digitalWrite(blueLed,HIGH);
-  setDebug("0");
   
   setupFileSystem();   // initialize FS and load data from internal memory.
   
@@ -116,14 +116,15 @@ void setup() {
     setDebug("1");
   }
   setupWifi();         // initialize wifi
+  
   if(!SETTINGS_MODE){
-    //modify watchdog interval to 8seconds
-    ESP.wdtDisable();
-    ESP.wdtEnable(WDTO_8S);
     
-    Serial.println("loading nrf and telegram");
     setupNRF();       // initialize nrf module
     setupTelegram();  // initialize telegram
+
+    //modify watchdog interval to 8seconds    
+    ESP.wdtDisable();
+    ESP.wdtEnable(WDTO_8S);
   }else{
     setupWebServer(); //initialize configuration web server
     setupOTA();       //initialize OTA 
@@ -132,7 +133,7 @@ void setup() {
     saveConfig();
     SETTINGS_MODE = true;
   }
-  Serial.println(ESP.getFreeHeap());
+  
   digitalWrite(redLed,LOW);
   digitalWrite(blueLed,LOW);
 }
@@ -141,9 +142,7 @@ int n = 0; //helps to order function execution
 void loop() {
   // it will help to avoid exception 29 problem.
   if(!SETTINGS_MODE){//normal, non settings mode.   
-    n++; //increment n
-    ESP.wdtFeed(); // feed watchdog manually
-    tcpCleanup();  //THIS IS SUPER IMPORTANT. SOLVES MEMORY LEAK
+    n++; //increment n    
     if(n == 1 || n == 3){
       readButtons(); //read buttons
     }else if(n == 2){
@@ -152,6 +151,7 @@ void loop() {
       listenTelegram(); //telegram messages
     }else{
       n = 0;
+      ESP.wdtFeed(); // feed watchdog manually
     }
   }else{
     // we're in settings mode
