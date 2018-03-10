@@ -33,5 +33,8 @@
 ![emergency button pcb implementation fron](/imgs/IMG_20171120_163525_609.jpg)  
 #### Battery Consumption  
 ![emergency button battery consumption](/imgs/emergency_button_energy_consumption.jpg)  
-
-
+## Further Improvements  
+### Battery improvement  
+Only a step-down voltage regulator is included in the circuit. This means we can use batteries with voltage values up to 6V. Battery voltage will be stepped down to 3.3V, which is the value at which the circuit operates.  
+Device uses CR2032 batterie which nominal value is 3V. Once it's charge goes under 2.6V, NRF24L01 is unable to operate properly.  
+Adding an additional step up resistor will consume some extra microAmps, but in exchange the battery will get dryed out down to 0.8V.  
