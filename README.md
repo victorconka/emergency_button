@@ -18,7 +18,7 @@
 ## Configuration  
 ### Server  
 #### Schematic:  
-![Emergency Button Server Schematic](/imgs/server schematic2.png)  
+![Emergency Button Server Schematic](/imgs/server_schematic2.png)  
 #### PCB  
 ![server protoboard pcb](/imgs/IMG_20171120_180733_227_cr.jpg)  
 ### Emergency Button  
