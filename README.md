@@ -31,5 +31,7 @@
 ![emergency button pcb implementation back](/imgs/IMG_20171120_164349_951.jpg)  
 ##### FRONT
 ![emergency button pcb implementation fron](/imgs/IMG_20171120_163525_609.jpg)  
+#### Battery Consumption  
+![emergency button battery consumption](/imgs/emergency_button_energy_consumption.jpg)  
 
 
